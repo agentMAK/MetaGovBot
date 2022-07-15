@@ -25,10 +25,8 @@ export class TrackSnapshot {
     async _checkNewProp() {
          console.log("checking")
         const currentProps = await this._getCurrentProposals();
-        console.log(currentProps)
     
         const newProps = currentProps.filter(prop => !this._currentProps.includes(prop));
-        console.log(newProps)
 
         if (newProps.length > 0) {
             console.log("change detected")
@@ -73,7 +71,7 @@ export class TrackSnapshot {
 
             const config = {
               method: 'get',
-              url: process.env.SNAPSHOT_HUB+'graphql',
+              url: process.env.SNAPSHOT_HUB+'/graphql',
               headers: { 
                 'Content-Type': 'application/json'
               },
@@ -100,7 +98,7 @@ export class TrackSnapshot {
           
           const config = {
             method: 'get',
-            url: process.env.SNAPSHOT_HUB+'graphql',
+            url: process.env.SNAPSHOT_HUB+'/graphql',
             headers: { 
               'Content-Type': 'application/json'
             },

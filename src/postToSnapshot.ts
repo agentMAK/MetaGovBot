@@ -1,39 +1,44 @@
-import snapshot from '@snapshot-labs/snapshot.js';
-import { ethers, Wallet, providers  } from "ethers";
-import 'dotenv/config'
+import snapshot from "@snapshot-labs/snapshot.js";
+import { ethers, Wallet } from "ethers";
+import { getAddress } from "@ethersproject/address";
+import getQuorum from "../utils/getQuorum";
+import "dotenv/config";
 
-const hub = 'https://testnet.snapshot.org';
+
+const hub = process.env.SNAPSHOT_HUB;
 const client = new snapshot.Client712(hub);
 
+const postToSnapshot = async (data) => {
+  const provider = new ethers.providers.JsonRpcProvider(
+    process.env.RPC_URL
+  );
+  const signer: Wallet = new Wallet(process.env.PRIV_KEY, provider);
+  const account = await signer.getAddress();
 
+  const proposal = data.message
+  const quorum = await numberWithCommas(await getQuorum());
 
-const postToSnapshot = async () => {
+  
+  const receipt = await client.proposal(signer, getAddress(account), {
+    space: "londonuk.eth",
+    type: "single-choice",
+    title: '[Aave] '+proposal.title,
+    body: "This MetaGovernance vote is for voting on Aave's latest proposal using Index Products.\n\nThe quorum for this vote is "+ quorum+" INDEX - **[5% Circulating Supply](https://dune.com/queries/569413)**.\n\nPlease review the on-chain vote of the proposal here in the link below;",
+    discussion: proposal.discussion,
+    choices: proposal.choices,
+    start: proposal.start,
+    end: proposal.end,
+    snapshot: await signer.provider.getBlockNumber(),
+    plugins: "{}",
+  });
 
-    const provider: providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider("https://eth-rinkeby.alchemyapi.io/v2/tuI0i3btdgtVs3Yxs3cnT35bvvKZwJ4_");
-    const signer: Wallet = new Wallet(process.env.PRIV_KEY, provider);
-    const account = await signer.getAddress();
+  console.log(receipt);
+};
 
-    console.log(account)
-
-    const now = Math.floor(Date.now()/1000);
-
-    try {
-
-        const receipt = await client.proposal(signer,account, {
-            space: "londonuk.eth",
-            type: "single-choice",
-            title: "Test proposal using Snapshot",
-            body: "body",
-            discussion: "",
-            choices: ['Hellow'],
-            start: now,
-            end:1657543232,
-            snapshot: await signer.provider.getBlockNumber(),
-            plugins: "",
-        });
-    } catch (e) {
-        console.error(e);
-    }
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 
-postToSnapshot()
+
+export default postToSnapshot;
+
