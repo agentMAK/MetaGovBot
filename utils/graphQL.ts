@@ -5,6 +5,8 @@ import axiosRetry from "axios-retry";
 axiosRetry(axios, { retries: 3 });
 
 export async function getProposalById(id) {
+
+  console.log("fetch")
     
     const data = JSON.stringify({
         query: `query Proposal ($proposalId: String!){
@@ -38,6 +40,7 @@ export async function getProposalById(id) {
       };
 
       const response = await axios(config as unknown)
+      console.log("fetched")
       return response.data.data.proposal
 
 }
