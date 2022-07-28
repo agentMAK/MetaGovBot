@@ -31,6 +31,7 @@ const proposalEvents = new events.EventEmitter();
 
 proposalEvents.on('Proposal Created', async (id) => {
     const proposal = await getProposalById(id);
+    //console.log(proposal)
     postToSnapshot(proposal);
 });
 

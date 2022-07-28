@@ -21,8 +21,8 @@ const postToSnapshot = async (proposal) => {
     const receipt = await client.proposal(signer, getAddress(account), {
       space: process.env.SPACE_NAME,
       type: "single-choice",
-      title: "[" +proposal.space.name+ "] "+proposal.title.substring(11),
-      body: "NEWThis MetaGovernance vote is for voting on "+proposal.space.name+"'s latest proposal using Index Products.\n\nThe quorum for this vote is "+ quorum+" INDEX - **[5% Circulating Supply](https://dune.com/queries/569413)**.\n\nPlease review the on-chain vote of the proposal here in the link below;",
+      title: "[" +proposal.space.name+ "] "+proposal.title,
+      body: "This MetaGovernance vote is for voting on "+proposal.space.name+"'s latest proposal using Index Products.\n\nThe quorum for this vote is "+ quorum+" INDEX - **[5% Circulating Supply](https://dune.com/queries/569413)**.\n\nPlease review the on-chain vote of the proposal here in the link below;",
       discussion: proposal.discussion,
       choices: proposal.choices,
       start: proposal.start,
