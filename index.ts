@@ -20,6 +20,10 @@ app.post("/" ,(req, res) => {
     res.sendStatus(200);
 })
 
+app.get("/", (req, res) => {
+    res.send("Express on Vercel");
+  });
+
 
 
 
