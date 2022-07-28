@@ -40,14 +40,7 @@ export async function getProposalById(id) {
         data : data
       };
 
-      try {
-        const response = await axios(config as unknown)
-        console.log(response)
-        console.log("fetch finished")
-        return response.data.data.proposal
-      } catch (error) {
-        console.log(error)
-      }
-
+      const response = await axios(config as unknown)
+      return response.data.data.proposal
 
 }
