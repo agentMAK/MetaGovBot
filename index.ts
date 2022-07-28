@@ -21,7 +21,6 @@ app.post("/" ,(req, res) => {
 })
 
 
-app.listen(8080)
 
 
 const proposalEvents = new events.EventEmitter();
@@ -30,3 +29,8 @@ proposalEvents.on('Proposal Created', async (id) => {
     const proposal = await getProposalById(id);
     postToSnapshot(proposal);
 });
+
+
+app.listen(8080)
+
+module.exports = app;
