@@ -6,6 +6,8 @@ import fetch from 'cross-fetch';
 axiosRetry(axios, { retries: 3 });
 
 export async function getProposalById(id) {
+
+  console.log("fetch Method")
     
     const data = JSON.stringify({
         query: `query Proposal ($proposalId: String!){
@@ -42,6 +44,8 @@ export async function getProposalById(id) {
       );
     
       const json = await response.json();
+
+      console.log("fetched Finished")
       return json.data.proposal
 
 }
