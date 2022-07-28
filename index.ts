@@ -32,8 +32,9 @@ const proposalEvents = new events.EventEmitter();
 
 proposalEvents.on('Proposal Created', async (id) => {
     const proposal = await getProposalById(id);
-    console.log(proposal.space.name)
-    postToSnapshot(proposal);
+    console.log(proposal)
+    console.log("Managed to fetch")
+    //postToSnapshot(proposal);
 });
 
 
