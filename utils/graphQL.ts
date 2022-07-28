@@ -30,29 +30,18 @@ export async function getProposalById(id) {
                 }`,
         variables: { "proposalId":id  }
       });
-
-      try {
-
-      const response = await fetch(
-        'https://hub.snapshot.org'+'/graphql',
-        {
-          method: 'post',
-          body: data,
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'Node',
-          },
-        }
-      );
-
-      const json = await response.json();
-
-      console.log("fetched Finished")
-      return json.data.proposal
       
-      } catch (error) {
-        console.log(error)
-      }
-  
+      const config = {
+        method: 'post',
+        url: 'https://hub.snapshot.org'+'/graphql',
+        headers: { 
+          'Content-Type': 'application/json',
+        },
+        data : data
+      };
+
+      const response = await axios(config as unknown)
+      console.log("fetch finished")
+      return response.data.data.proposal
 
 }
