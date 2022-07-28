@@ -1,12 +1,13 @@
 import 'dotenv/config'
 import { default as axios } from "axios";
 import axiosRetry from "axios-retry";
+import fetch from 'cross-fetch';
 
 axiosRetry(axios, { retries: 3 });
 
 export async function getProposalById(id) {
 
-  console.log("fetch")
+  console.log("fetch Method")
     
     const data = JSON.stringify({
         query: `query Proposal ($proposalId: String!){
@@ -40,7 +41,8 @@ export async function getProposalById(id) {
       };
 
       const response = await axios(config as unknown)
-      console.log("fetched")
+      console.log(response)
+      console.log("fetch finished")
       return response.data.data.proposal
 
 }
