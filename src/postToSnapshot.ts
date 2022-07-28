@@ -8,31 +8,33 @@ import "dotenv/config";
 const hub = process.env.SNAPSHOT_HUB;
 const client = new snapshot.Client712(hub);
 
-const postToSnapshot = async (data) => {
+const postToSnapshot = async (proposal) => {
   const provider = new ethers.providers.JsonRpcProvider(
     process.env.RPC_URL
   );
   const signer: Wallet = new Wallet(process.env.PRIV_KEY, provider);
   const account = await signer.getAddress();
 
-  const proposal = data.message
   const quorum = await numberWithCommas(await getQuorum());
 
-  
-  const receipt = await client.proposal(signer, getAddress(account), {
-    space: "londonuk.eth",
-    type: "single-choice",
-    title: '[Aave] '+proposal.title,
-    body: "This MetaGovernance vote is for voting on Aave's latest proposal using Index Products.\n\nThe quorum for this vote is "+ quorum+" INDEX - **[5% Circulating Supply](https://dune.com/queries/569413)**.\n\nPlease review the on-chain vote of the proposal here in the link below;",
-    discussion: proposal.discussion,
-    choices: proposal.choices,
-    start: proposal.start,
-    end: proposal.end,
-    snapshot: await signer.provider.getBlockNumber(),
-    plugins: "{}",
-  });
+  try {
+    const receipt = await client.proposal(signer, getAddress(account), {
+      space: process.env.SPACE_NAME,
+      type: "single-choice",
+      title: "[" +proposal.space.name+ "] "+proposal.title.substring(11),
+      body: "NEWThis MetaGovernance vote is for voting on "+proposal.space.name+"'s latest proposal using Index Products.\n\nThe quorum for this vote is "+ quorum+" INDEX - **[5% Circulating Supply](https://dune.com/queries/569413)**.\n\nPlease review the on-chain vote of the proposal here in the link below;",
+      discussion: proposal.discussion,
+      choices: proposal.choices,
+      start: proposal.start,
+      end: proposal.end - 24 * 60 * 60,
+      snapshot: await signer.provider.getBlockNumber(),
+      plugins: "{}",
+    });
 
-  console.log(receipt);
+    console.log(receipt);
+  } catch(error) {
+    console.log(error)
+  }
 };
 
 function numberWithCommas(x) {
