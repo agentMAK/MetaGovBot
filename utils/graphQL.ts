@@ -31,6 +31,8 @@ export async function getProposalById(id) {
         variables: { "proposalId":id  }
       });
 
+      try {
+
       const response = await fetch(
         'https://hub.snapshot.org'+'/graphql',
         {
@@ -42,10 +44,15 @@ export async function getProposalById(id) {
           },
         }
       );
-    
+
       const json = await response.json();
 
       console.log("fetched Finished")
       return json.data.proposal
+      
+      } catch (error) {
+        console.log(error)
+      }
+  
 
 }
